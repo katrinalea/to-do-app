@@ -1,7 +1,10 @@
-import { greet } from "./utils/greet";
+import ToDo from "./to-do"
+import "./toDo.css"
 
 function App(): JSX.Element {
-  return <h1>{greet("World")}</h1>;
+  return (
+ <ToDo />
+  )
 }
 
 export default App;

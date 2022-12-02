@@ -4,3 +4,11 @@
 .list {
   list-style-type: none;
 }
+.addbar {
+  border-color: black;
+  border-radius: 1ch;
+}
+.button {
+  border-radius: 1ch;
+  border-color: black;
+}

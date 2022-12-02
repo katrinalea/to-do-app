@@ -76,11 +76,15 @@ export default function ToDo(): JSX.Element {
       <div className="page">
         <h1> To Do List</h1>
         <input
+          className="addbar"
           type="text"
           placeholder="Input a ToDo item"
           onChange={(e) => setToDoItem(e.target.value)}
         />
-        <button onClick={() => handleAddItem(toDoItem)}> Submit</button>
+        <button className="button" onClick={() => handleAddItem(toDoItem)}>
+          {" "}
+          Submit
+        </button>
         <hr />
         <h3> This is what you need to do:</h3>
         <ul className="list">

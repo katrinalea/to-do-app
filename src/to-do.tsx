@@ -10,7 +10,7 @@ export default function ToDo(): JSX.Element {
   const [allTasks, setAllTasks] = useState<ToDoInterface[]>([]);
   const [toDoItem, setToDoItem] = useState<string>("");
   const [completedTasks, setCompletedTasks] = useState<ToDoInterface[]>([]);
-  const [input, setInput] = useState<string>("");
+  
 
   useEffect(() => {
     const fetchAPI = async () => {

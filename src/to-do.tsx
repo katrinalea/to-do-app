@@ -94,7 +94,7 @@ export default function ToDo(): JSX.Element {
           Submit
         </button>
         <hr />
-        <h3> This is what you need to do:</h3>
+        <h3> This is what you need to do today:</h3>
         <ul className="list">
           {allTasks.map((item: ToDoInterface) => (
             <li key={item.id}>

@@ -71,6 +71,10 @@ export default function ToDo(): JSX.Element {
     console.log(response);
   };
 
+  const handleRefreshCompleted = async () => {
+    await axios.delete("https://todo-backend-bfou.onrender.com/completed")
+  }
+
   return (
     <>
       <div className="page">
@@ -107,6 +111,7 @@ export default function ToDo(): JSX.Element {
             <li key={item.id}>{item.message}</li>
           ))}
         </ul>
+        <button className = "button" onClick ={handleRefreshCompleted}> Refresh completed list </button>
       </div>
     </>
   );

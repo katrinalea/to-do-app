@@ -1,3 +1,6 @@
 .page {
-    text-align: center;
+  text-align: center;
+}
+.list {
+  list-style-type: none;
 }

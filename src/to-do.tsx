@@ -28,6 +28,15 @@ export default function ToDo (): JSX.Element {
         const response = await axios.post("https://todo-backend-bfou.onrender.com/items", {message: item});
         console.log(response)
     }
+
+    const handleDeleteItem = async (number: number) => {
+        const response = await axios.delete(`https://todo-backend-bfou.onrender.com/items/`, {data: {id: number}});
+        console.log(response)
+        console.log([...allTasks])
+    }
+    // need to delete specific item from API
+
+    
         
      
     
@@ -41,8 +50,8 @@ export default function ToDo (): JSX.Element {
         <button onClick = {() => handleAddItem(toDoItem)}> Submit</button>
         <p> This is what you need to do:</p>
             <ul>
-               {allTasks.map((item: ToDoInterface, index: number) => (
-       <li key ={index} >{item.id}{item.message}</li>))}
+               {allTasks.map((item: ToDoInterface) => (
+       <li key ={item.id} >{item.message} <button onClick = {() => handleDeleteItem(item.id)} > Delete item</button> </li>))} 
     </ul>
         </div>
         </>

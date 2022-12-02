@@ -1,4 +1,5 @@
 import axios from "axios";
+import { setUncaughtExceptionCaptureCallback } from "process";
 import { useEffect, useState } from "react";
 
 interface ToDoInterface {
@@ -9,6 +10,7 @@ export default function ToDo(): JSX.Element {
   const [allTasks, setAllTasks] = useState<ToDoInterface[]>([]);
   const [toDoItem, setToDoItem] = useState<string>("");
   const [completedTasks, setCompletedTasks] = useState<ToDoInterface[]>([]);
+  const [input, setInput] = useState<string>("");
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -47,6 +49,7 @@ export default function ToDo(): JSX.Element {
       { message: item }
     );
     console.log(response);
+    setToDoItem("");
   };
 
   // deletes the item from the all items api
@@ -72,18 +75,19 @@ export default function ToDo(): JSX.Element {
   };
 
   const handleRefreshCompleted = async () => {
-    await axios.delete("https://todo-backend-bfou.onrender.com/completed")
-  }
+    await axios.delete("https://todo-backend-bfou.onrender.com/completed");
+  };
 
   return (
     <>
       <div className="page">
         <h1> To Do List</h1>
         <input
+          id="input"
           className="addbar"
           type="text"
-          placeholder="Input a ToDo item"
           onChange={(e) => setToDoItem(e.target.value)}
+          value={toDoItem}
         />
         <button className="button" onClick={() => handleAddItem(toDoItem)}>
           {" "}
@@ -111,7 +115,10 @@ export default function ToDo(): JSX.Element {
             <li key={item.id}>{item.message}</li>
           ))}
         </ul>
-        <button className = "button" onClick ={handleRefreshCompleted}> Refresh completed list </button>
+        <button className="button" onClick={handleRefreshCompleted}>
+          {" "}
+          Refresh completed list{" "}
+        </button>
       </div>
     </>
   );

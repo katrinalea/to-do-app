@@ -23,8 +23,7 @@ export default function ToDo(): JSX.Element {
       const fetchedWholeObject = response.data;
       const fetchedTasks = fetchedWholeObject.data;
       // sets tasks to the data
-      setCompletedTasks(fetchedTasks);
-      
+      setAllTasks(fetchedTasks); 
     };
     fetchAPI();
   }, [allTasks]);
@@ -51,7 +50,7 @@ export default function ToDo(): JSX.Element {
   const handleAddItem = async (item: string) => {
     const response = await axios.post(
       "https://todo-backend-bfou.onrender.com/items",
-      { message: item }
+      {message: item, completed: 'false'}
     );
     console.log("adding item " + item)
     console.log(response);
@@ -109,7 +108,7 @@ export default function ToDo(): JSX.Element {
         <ul className="list">
           <>
           {allTasks && allTasks.map((item: ToDoInterface) => (
-            <li key={item.id} contentEditable = "true" onInput = {e => editTaskitem(item.id, e.currentTarget.textContent)}>
+            <li key={item.id}>
               {item.message}
               <button onClick={() => handleDeleteItem(item.id)}>🗑️</button>
               <button

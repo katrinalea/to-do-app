@@ -17,12 +17,12 @@ export default function ToDo(): JSX.Element {
   useEffect(() => {
     const fetchAPI = async () => {
       //using axios to fetch the API, using a get command, assigning the vraible 'response' to theAPI info
-      // const response = await axios.get(
-      //   "https://todo-backend-bfou.onrender.com/items"
-      // );
       const response = await axios.get(
-        "http://localhost:4000/items"
+        "https://todo-backend-bfou.onrender.com/items"
       );
+      // const response = await axios.get(
+      //   "http://localhost:4000/items"
+      // );
       // assigning fetchedTasks to the API data, specifically data
       const fetchedWholeObject = response.data;
       const fetchedTasks = fetchedWholeObject.data;
@@ -36,12 +36,12 @@ export default function ToDo(): JSX.Element {
   useEffect(() => {
     const fetchAPI = async () => {
       //using axios to fetch the API, using a get command, assigning the vraible 'response' to theAPI info
-      // const response = await axios.get(
-      //   "https://todo-backend-bfou.onrender.com/completed"
-      // );
       const response = await axios.get(
-        "http://localhost:4000/completed"
+        "https://todo-backend-bfou.onrender.com/completed"
       );
+      // const response = await axios.get(
+      //   "http://localhost:4000/completed"
+      // );
       // assigning fetchedTasks to the API data, specifically data
       const fetchedWholeObject = response.data;
       const fetchedCompletedTasks = fetchedWholeObject.data;
@@ -89,8 +89,8 @@ export default function ToDo(): JSX.Element {
   };
 
   const handleRefreshCompleted = async () => {
-    // await axios.delete("https://todo-backend-bfou.onrender.com/completed")
-    await axios.delete("http://localhost:4000/completed");
+    await axios.delete("https://todo-backend-bfou.onrender.com/completed")
+    // await axios.delete("http://localhost:4000/completed");
   }; //working
 
   const editTaskItem = async (id: number, textChange: string | null) => {

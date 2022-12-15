@@ -4,13 +4,15 @@ import { useEffect, useState } from "react";
 interface ToDoInterface {
   id: number;
   message: string;
+  date: Date;
+  completed: boolean
 }
 export default function ToDo(): JSX.Element {
   const [allTasks, setAllTasks] = useState<ToDoInterface[]>([]);
   const [toDoItem, setToDoItem] = useState<string>("");
   const [completedTasks, setCompletedTasks] = useState<ToDoInterface[]>([]);
+  console.log(completedTasks, "completed tasks", typeof completedTasks, Array.isArray(completedTasks))
   
-
   useEffect(() => {
     const fetchAPI = async () => {
       //using axios to fetch the API, using a get command, assigning the vraible 'response' to theAPI info
@@ -18,9 +20,11 @@ export default function ToDo(): JSX.Element {
         "https://todo-backend-bfou.onrender.com/items"
       );
       // assigning fetchedTasks to the API data, specifically data
-      const fetchedTasks = response.data;
+      const fetchedWholeObject = response.data;
+      const fetchedTasks = fetchedWholeObject.data;
       // sets tasks to the data
-      setAllTasks(fetchedTasks);
+      setCompletedTasks(fetchedTasks);
+      
     };
     fetchAPI();
   }, [allTasks]);
@@ -33,10 +37,12 @@ export default function ToDo(): JSX.Element {
         "https://todo-backend-bfou.onrender.com/completed"
       );
       // assigning fetchedTasks to the API data, specifically data
-      const fetchedCompletedTasks = response.data;
+      const fetchedWholeObject = response.data;
+      const fetchedCompletedTasks = fetchedWholeObject.data;
+      console.log(fetchedCompletedTasks, "completed")
       // sets tasks to the data
       setCompletedTasks(fetchedCompletedTasks);
-      console.log("fetched completed");
+      
     };
     fetchAPI();
   }, [completedTasks]);
@@ -47,6 +53,7 @@ export default function ToDo(): JSX.Element {
       "https://todo-backend-bfou.onrender.com/items",
       { message: item }
     );
+    console.log("adding item " + item)
     console.log(response);
     setToDoItem("");
   };
@@ -77,6 +84,11 @@ export default function ToDo(): JSX.Element {
     await axios.delete("https://todo-backend-bfou.onrender.com/completed");
   };
 
+  const editTaskitem = async (id: number, itemUpdate: string | null) => {
+    await axios.patch(`https://todo-backend-bfou.onrender.com/items/${id}`,
+    {itemUpdate})
+  } // complete patch request
+
   return (
     <>
       <div className="page">
@@ -95,8 +107,9 @@ export default function ToDo(): JSX.Element {
         <hr />
         <h3> This is what you need to do today:</h3>
         <ul className="list">
-          {allTasks.map((item: ToDoInterface) => (
-            <li key={item.id}>
+          <>
+          {allTasks && allTasks.map((item: ToDoInterface) => (
+            <li key={item.id} contentEditable = "true" onInput = {e => editTaskitem(item.id, e.currentTarget.textContent)}>
               {item.message}
               <button onClick={() => handleDeleteItem(item.id)}>🗑️</button>
               <button
@@ -106,13 +119,16 @@ export default function ToDo(): JSX.Element {
               </button>
             </li>
           ))}
+          </>
         </ul>
         <hr />
         <h3> Your completed tasks:</h3>
         <ul className="list">
-          {completedTasks.map((item: ToDoInterface, index) => (
+          <>
+          {completedTasks && completedTasks.map((item: ToDoInterface, index) => (
             <li key={item.id}>{item.message}</li>
           ))}
+          </>
         </ul>
         <button className="button" onClick={handleRefreshCompleted}>
           {" "}

@@ -5,15 +5,20 @@ interface ToDoInterface {
   id: number;
   message: string;
   date: Date;
-  completed: boolean
+  completed: boolean;
 }
 export default function ToDo(): JSX.Element {
   const [allTasks, setAllTasks] = useState<ToDoInterface[]>([]);
   const [toDoItem, setToDoItem] = useState<string>("");
   const [completedTasks, setCompletedTasks] = useState<ToDoInterface[]>([]);
-  const [textChange, setTextChange] = useState<string | null>("")
-  console.log(completedTasks, "completed tasks", typeof completedTasks, Array.isArray(completedTasks))
-  
+  const [textChange, setTextChange] = useState<string | null>("");
+  console.log(
+    completedTasks,
+    "completed tasks",
+    typeof completedTasks,
+    Array.isArray(completedTasks)
+  );
+
   useEffect(() => {
     const fetchAPI = async () => {
       //using axios to fetch the API, using a get command, assigning the vraible 'response' to theAPI info
@@ -27,7 +32,7 @@ export default function ToDo(): JSX.Element {
       const fetchedWholeObject = response.data;
       const fetchedTasks = fetchedWholeObject.data;
       // sets tasks to the data
-      setAllTasks(fetchedTasks); 
+      setAllTasks(fetchedTasks);
     };
     fetchAPI();
   }, [allTasks]);
@@ -45,10 +50,9 @@ export default function ToDo(): JSX.Element {
       // assigning fetchedTasks to the API data, specifically data
       const fetchedWholeObject = response.data;
       const fetchedCompletedTasks = fetchedWholeObject.data;
-      console.log(fetchedCompletedTasks, "completed")
+      console.log(fetchedCompletedTasks, "completed");
       // sets tasks to the data
       setCompletedTasks(fetchedCompletedTasks);
-      
     };
     fetchAPI();
   }, [completedTasks]);
@@ -57,13 +61,13 @@ export default function ToDo(): JSX.Element {
   const handleAddItem = async (item: string) => {
     const response = await axios.post(
       "https://todo-backend-bfou.onrender.com/items",
-      {message: item, completed: 'false'}
+      { message: item, completed: "false" }
     );
     // const response = await axios.post(
     //   "http://localhost:4000/items",
     //   {message: item, completed: 'false'}
     // );
-    console.log("adding item " + item)
+    console.log("adding item " + item);
     console.log(response);
     setToDoItem("");
   };
@@ -82,23 +86,26 @@ export default function ToDo(): JSX.Element {
 
   // deleting the task from the all items api, then posts to the completed api
   const handleCompletedItem = async (number: number) => {
-    await axios.patch(`https://todo-backend-bfou.onrender.com/items/${number}`,
-    {id: number})
+    await axios.patch(
+      `https://todo-backend-bfou.onrender.com/items/${number}`,
+      { id: number }
+    );
     // await axios.patch(`http://localhost:4000/items/${number}`,
     // {id: number})
   };
 
   const handleRefreshCompleted = async () => {
-    await axios.delete("https://todo-backend-bfou.onrender.com/completed")
+    await axios.delete("https://todo-backend-bfou.onrender.com/completed");
     // await axios.delete("http://localhost:4000/completed");
   }; //working
 
   const editTaskItem = async (id: number, textChange: string | null) => {
-    await axios.patch(`https://todo-backend-bfou.onrender.com/items/${id}`,
-    {message: textChange})
+    await axios.patch(`https://todo-backend-bfou.onrender.com/items/${id}`, {
+      message: textChange,
+    });
     // await axios.patch(`http://localhost:4000/items/update/${id}`,
     // {message: textChange})
-  } // complete patch request
+  }; // complete patch request
 
   return (
     <>
@@ -119,27 +126,33 @@ export default function ToDo(): JSX.Element {
         <h3> This is what you need to do today:</h3>
         <ul className="list">
           <>
-          {allTasks && allTasks.map((item: ToDoInterface) => (
-            <li key={item.id} contentEditable = 'true' onChange={(e) => setTextChange(e.currentTarget.textContent)}>
-              {item.message}
-              <button onClick={() => handleDeleteItem(item.id)}>🗑️</button>
-              <button
-                onClick={() => handleCompletedItem(item.id)}
-              >
-                ✅
-              </button>
-              <button onClick={() => editTaskItem(item.id, textChange)}>🖊️</button>
-            </li>
-          ))}
+            {allTasks &&
+              allTasks.map((item: ToDoInterface) => (
+                <li
+                  key={item.id}
+                  contentEditable="true"
+                  onChange={(e) => setTextChange(e.currentTarget.textContent)}
+                >
+                  {item.message}
+                  <button onClick={() => handleDeleteItem(item.id)}>🗑️</button>
+                  <button onClick={() => handleCompletedItem(item.id)}>
+                    ✅
+                  </button>
+                  <button onClick={() => editTaskItem(item.id, textChange)}>
+                    🖊️
+                  </button>
+                </li>
+              ))}
           </>
         </ul>
         <hr />
         <h3> Your completed tasks:</h3>
         <ul className="list">
           <>
-          {completedTasks && completedTasks.map((item: ToDoInterface) => (
-            <li key={item.id}>{item.message}</li>
-          ))}
+            {completedTasks &&
+              completedTasks.map((item: ToDoInterface) => (
+                <li key={item.id}>{item.message}</li>
+              ))}
           </>
         </ul>
         <button className="button" onClick={handleRefreshCompleted}>

@@ -11,13 +11,16 @@ export default function ToDo(): JSX.Element {
   const [allTasks, setAllTasks] = useState<ToDoInterface[]>([]);
   const [toDoItem, setToDoItem] = useState<string>("");
   const [completedTasks, setCompletedTasks] = useState<ToDoInterface[]>([]);
-  const [textChange, setTextChange] = useState<string | null>("");
+  const [textChange, setTextChange] = useState<string>("");
+  const [editing, setEditing] = useState<boolean>(false);
+
   console.log(
     completedTasks,
     "completed tasks",
     typeof completedTasks,
     Array.isArray(completedTasks)
   );
+  console.log(textChange);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -86,10 +89,9 @@ export default function ToDo(): JSX.Element {
 
   // deleting the task from the all items api, then posts to the completed api
   const handleCompletedItem = async (number: number) => {
-    await axios.patch(
-      `https://todo-backend-bfou.onrender.com/items/${number}`,
-      { id: number }
-    );
+    await axios.patch("https://todo-backend-bfou.onrender.com/items}", {
+      id: number,
+    });
     // await axios.patch(`http://localhost:4000/items/${number}`,
     // {id: number})
   };
@@ -99,10 +101,14 @@ export default function ToDo(): JSX.Element {
     // await axios.delete("http://localhost:4000/completed");
   }; //working
 
-  const editTaskItem = async (id: number, textChange: string | null) => {
-    await axios.patch(`https://todo-backend-bfou.onrender.com/items/${id}`, {
-      message: textChange,
+  const handleEditTaskItem = async (id: number, textchange: string) => {
+    console.log("editting entered")
+    const response = await axios.patch(`https://todo-backend-bfou.onrender.com/items`, {
+      id: id,
+      message: textchange,
     });
+    setEditing(false)
+    console.log(response)
     // await axios.patch(`http://localhost:4000/items/update/${id}`,
     // {message: textChange})
   }; // complete patch request
@@ -128,19 +134,23 @@ export default function ToDo(): JSX.Element {
           <>
             {allTasks &&
               allTasks.map((item: ToDoInterface) => (
-                <li
-                  key={item.id}
-                  contentEditable="true"
-                  onChange={(e) => setTextChange(e.currentTarget.textContent)}
-                >
+                <li key={item.id}>
                   {item.message}
                   <button onClick={() => handleDeleteItem(item.id)}>🗑️</button>
                   <button onClick={() => handleCompletedItem(item.id)}>
                     ✅
                   </button>
-                  <button onClick={() => editTaskItem(item.id, textChange)}>
-                    🖊️
-                  </button>
+                  <button onClick={() => setEditing(true)}>🖊️</button>
+                  {editing === true && (
+                    <>
+                      <input onChange={(e) => setTextChange(e.target.value)} />
+                      <button
+                        onClick={() => handleEditTaskItem(item.id, textChange)}
+                      >
+                        Submit edit
+                      </button>{" "}
+                    </>
+                  )}
                 </li>
               ))}
           </>

@@ -94,7 +94,7 @@ export default function ToDo(): JSX.Element {
 
   const handleEditTaskItem = async (id: number, textchange: string) => {
     console.log("editing entered")
-    const response = await axios.patch(`https://todo-backend-bfou.onrender.com/${id}`, {
+    const response = await axios.patch(`https://todo-backend-bfou.onrender.com/updates`, {
       id: id,
       message: textchange,
     });

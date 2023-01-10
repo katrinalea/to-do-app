@@ -13,6 +13,7 @@ export default function ToDo(): JSX.Element {
   const [completedTasks, setCompletedTasks] = useState<ToDoInterface[]>([]);
   const [textChange, setTextChange] = useState<string>("");
   const [editing, setEditing] = useState<boolean>(false);
+  const [editingID, setEditingID] = useState<number>();
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -119,10 +120,22 @@ export default function ToDo(): JSX.Element {
                   <button onClick={() => handleCompletedItem(item.id)}>
                     ✅
                   </button>
-                  <button onClick={() => setEditing(true)}>🖊️</button>
-                  {editing === true && (
+                  <button
+                    onClick={() => {
+                      setEditing(true);
+                      setTextChange(item.message);
+                      setEditingID(item.id);
+                    }}
+                  >
+                    🖊️
+                  </button>
+                  {editing === true && editingID === item.id && (
                     <>
-                      <input onChange={(e) => setTextChange(e.target.value)} />
+                      <input
+                        value={textChange}
+                        type="text"
+                        onChange={(e) => setTextChange(e.target.value)}
+                      />
                       <button
                         onClick={() => handleEditTaskItem(item.id, textChange)}
                       >

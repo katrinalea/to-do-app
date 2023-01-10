@@ -14,13 +14,7 @@ export default function ToDo(): JSX.Element {
   const [textChange, setTextChange] = useState<string>("");
   const [editing, setEditing] = useState<boolean>(false);
 
-  console.log(
-    completedTasks,
-    "completed tasks",
-    typeof completedTasks,
-    Array.isArray(completedTasks)
-  );
-  console.log(textChange);
+
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -53,7 +47,6 @@ export default function ToDo(): JSX.Element {
       // assigning fetchedTasks to the API data, specifically data
       const fetchedWholeObject = response.data;
       const fetchedCompletedTasks = fetchedWholeObject.data;
-      console.log(fetchedCompletedTasks, "completed");
       // sets tasks to the data
       setCompletedTasks(fetchedCompletedTasks);
     };
@@ -70,8 +63,6 @@ export default function ToDo(): JSX.Element {
     //   "http://localhost:4000/items",
     //   {message: item, completed: 'false'}
     // );
-    console.log("adding item " + item);
-    console.log(response);
     setToDoItem("");
   };
 
@@ -89,7 +80,7 @@ export default function ToDo(): JSX.Element {
 
   // deleting the task from the all items api, then posts to the completed api
   const handleCompletedItem = async (number: number) => {
-    await axios.patch("https://todo-backend-bfou.onrender.com/items}", {
+    await axios.patch(`https://todo-backend-bfou.onrender.com/items/${number}`, {
       id: number,
     });
     // await axios.patch(`http://localhost:4000/items/${number}`,
@@ -102,13 +93,13 @@ export default function ToDo(): JSX.Element {
   }; //working
 
   const handleEditTaskItem = async (id: number, textchange: string) => {
-    console.log("editting entered")
-    const response = await axios.patch(`https://todo-backend-bfou.onrender.com/items`, {
+    console.log("editing entered")
+    const response = await axios.patch(`https://todo-backend-bfou.onrender.com/${id}`, {
       id: id,
       message: textchange,
     });
     setEditing(false)
-    console.log(response)
+    console.log(response, "patch response")
     // await axios.patch(`http://localhost:4000/items/update/${id}`,
     // {message: textChange})
   }; // complete patch request
